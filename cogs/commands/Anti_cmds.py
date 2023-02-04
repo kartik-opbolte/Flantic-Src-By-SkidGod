@@ -1,17 +1,21 @@
 from __future__ import annotations
 from discord.ext import commands
-from core import Cog, Darkz, Context
+from core import Cog, Astroz, Context
 import discord
 from utils.Tools import *
+from discord.ui import Button, View
+import datetime
+from typing import Optional
 
-class Antinuke(Cog):
+
+class Security(Cog):
   """Shows a list of commands regarding antinuke"""
-  def __init__(self, client: Darkz):
+  def __init__(self, client:Astroz):
     self.client = client
 
-  @commands.group(name="antinuke", aliases=["anti", "security", "protection"], help="Enables/Disables antinuke in your server!", invoke_without_command=True)
+  @commands.group(name="Antinuke", aliases=["anti", "Security"], help="Enables/Disables antinuke in your server!", invoke_without_command=True, usage="Antinuke Enable/Disable")
   @blacklist_check()
-  @is_voter()
+
   @commands.cooldown(1, 10, commands.BucketType.user)
   @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
   @commands.guild_only()
@@ -20,9 +24,9 @@ class Antinuke(Cog):
         await ctx.send_help(ctx.command)
         ctx.command.reset_cooldown(ctx)
 
-  @_antinuke.command(name="enable", help="Server owner should enable antinuke for the server!", aliases=["on"])
+  @_antinuke.command(name="enable", help="Server owner should enable antinuke for the server!",usage="Antinuke Enable")
   @blacklist_check()
-  @is_voter()
+
   @commands.cooldown(1, 10, commands.BucketType.user)
   @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
   @commands.guild_only()
@@ -33,22 +37,23 @@ class Antinuke(Cog):
     punish = d2["punishment"]
     if ctx.author.id == ctx.guild.owner_id:
       if data == "on":
-        embed = discord.Embed(title="Darkz Security", description=f"**{ctx.guild.name} security settings **<:role:977918310421237800>\nOhh uh! looks like your server has already enabled security\n\nCurrent Status: <:disable_no:1001804850847301643><:enable_yes:1001804893671137280>\n\n> To disable use `antinuke disable`", color=discord.Colour(0x2f3136))
+        embed = discord.Embed(title="Astroz Security", description=f"**{ctx.guild.name} security settings **<:role_astroz:1037653804469997638>\nOhh uh! looks like your server has already enabled security\n\nCurrent Status: <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n\n> To disable use `antinuke disable`", color=0x00FFE4)
           
         await ctx.reply(embed=embed, mention_author=False)
       else:
         data = "on"
         updateanti(ctx.guild.id, data)
-        embed2 = discord.Embed(title="Darkz Security", description=f"**{ctx.guild.name} security settings** <:role:977918310421237800>\nAlso move my role to top of roles for me to work properly.<:darkz:1001384193487544350>\n\nPunishments:\n\n**Anti Bot:** <:disable_no:1001804850847301643><:enable_yes:1001804893671137280>\n**Anti Ban:** <:disable_no:1001804850847301643><:enable_yes:1001804893671137280>\n**Anti Kick:** <:disable_no:1001804850847301643><:enable_yes:1001804893671137280>\n**Anti Prune:** <:disable_no:1001804850847301643><:enable_yes:1001804893671137280>\n**Anti Channel Create/Delete/Update:** <:disable_no:1001804850847301643><:enable_yes:1001804893671137280>\n**Anti Role Create/Delete/Update:** <:disable_no:1001804850847301643><:enable_yes:1001804893671137280>\n**Anti Webhook Create:** <:disable_no:1001804850847301643><:enable_yes:1001804893671137280>\n**Anti Emoji Create/Delete/Update:** <:disable_no:1001804850847301643><:enable_yes:1001804893671137280>\n**Anti Guild Update:** <:disable_no:1001804850847301643><:enable_yes:1001804893671137280>\n**Anti Community Spam:** <:disable_no:1001804850847301643><:enable_yes:1001804893671137280>\n**Anti Integration Create:** <:disable_no:1001804850847301643><:enable_yes:1001804893671137280>\n**Anti Everyone/Here Mention:** <:disable_no:1001804850847301643><:enable_yes:1001804893671137280>\n**Anti Vanity Steal:** <:disable_no:1001804850847301643><:enable_yes:1001804893671137280>\n**Whitelisted Users:** {len(wled)}\n\n**Auto Recovery:** <:disable_no:1001804850847301643><:enable_yes:1001804893671137280>", color=discord.Colour(0x2f3136))
-        embed2.add_field(name="Other settings", value=f"To change the punishment type `{ctx.prefix}punishment set <type>`\nAvailable Punishments are `Ban`, `Kick` and `None`.")
+        embed2 = discord.Embed(title="Astroz Security", description=f"**{ctx.guild.name} Security Settings** <:role_astroz:1037653804469997638>\nAlso move my role to top of roles for me to work properly.\n\nPunishments:\n\n**Anti Bot:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Ban:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Kick:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Prune:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Channel Create/Delete/Update:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Role Create/Delete/Update:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Webhook Create:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Emoji Create/Delete/Update:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Guild Update:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Community Spam:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Integration Create:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Everyone/Here/Role Mention:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Vanity Steal:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Whitelisted Users:** {len(wled)}\n\n**Auto Recovery:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>", color=0x00FFE4)
+        embed2.add_field(name="Other Settings", value=f"To change the punishment type `{ctx.prefix}Antinuke punishment set <type>`\nAvailable Punishments are `Ban`, `Kick` and `None`.")
         embed2.set_footer(text=f"Current punishment type is {punish}")
         await ctx.reply(embed=embed2, mention_author=False)
     else:
-      await ctx.reply("You must be the guild owner to use the command!", mention_author=False)
+      hacker5 = discord.Embed(title="Astroz Security", description="<:error:1018174714750976030> Only owner of the server can run this command",color=0x00FFE4)
+      await ctx.reply(embed=hacker5, mention_author=False)
 
-  @_antinuke.command(name="disable", help="You can disable antinuke for your server using this command", aliases=["off"])
+  @_antinuke.command(name="disable", help="You can disable antinuke for your server using this command", aliases=["off"],usage="Antinuke disable")
   @blacklist_check()
-  @is_voter()
+
   @commands.cooldown(1, 10, commands.BucketType.user)
   @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
   @commands.guild_only()
@@ -56,17 +61,17 @@ class Antinuke(Cog):
     data = getanti(ctx.guild.id)
     if ctx.author.id == ctx.guild.owner_id:
       if data == "off":
-        emb = discord.Embed(title="Darkz Security", description=f"**{ctx.guild.name} security settings **<:role:977918310421237800>\nOhh NO! looks like your server has already disabled security\n\nCurrent Status: <:error_ok:946729104126922802>\n\n> To enable use `antinuke enable`")
+        emb = discord.Embed(title="Astroz Security", description=f"**{ctx.guild.name} Security Settings **<:role_astroz:1037653804469997638>\nOhh NO! looks like your server has already disabled security\n\nCurrent Status: <:astro_disable:1038127308814422067><:astroz_disble:1038127252476534785>\n\n> To enable use `antinuke enable`",color=0x00FFE4)
         await ctx.reply(embed=emb, mention_author=False)
       else:
         data = "off"
         updateanti(ctx.guild.id, data)
-        final = discord.Embed(title="Darkz Security", description=f"**{ctx.guild.name} security settings** <:role:977918310421237800>\nSuccessfully disabled security settings.\n\nCurrent Status: <:error_ok:946729104126922802>\n\n> To enable again use `antinuke enable`")
+        final = discord.Embed(title="Astroz Security", description=f"**{ctx.guild.name} Security Settings** <:role_astroz:1037653804469997638>\nSuccessfully disabled security settings.\n\nCurrent Status: <:astro_disable:1038127308814422067><:astroz_disble:1038127252476534785>\n\n> To enable again use `antinuke enable`",color=0x00FFE4)
         await ctx.reply(embed=final, mention_author=False)
 
-  @_antinuke.command(name="show", help="Shows currently antinuke config settings of your server", aliases=["config"])
+  @_antinuke.command(name="show", help="Shows currently antinuke config settings of your server", aliases=["config"],usage="Antinuke show")
   @blacklist_check()
-  @is_voter()
+
   @commands.has_permissions(administrator=True)
   @commands.cooldown(1, 10, commands.BucketType.user)
   @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
@@ -77,16 +82,16 @@ class Antinuke(Cog):
     wled = d2["whitelisted"]
     punish = d2["punishment"]
     if data == "off":
-      emb = discord.Embed(title="Darkz Security", description=f"**{ctx.guild.name} security settings **<:role:977918310421237800>\nOhh NO! looks like your server has already disabled security\n\nCurrent Status: <:error_ok:946729104126922802>\n\n> To enable use `antinuke enable`")
+      emb = discord.Embed(title="Astroz Security", description=f"**{ctx.guild.name} Security Settings **<:role_astroz:1037653804469997638>\nOhh NO! looks like your server has already disabled security\n\nCurrent Status: <:astro_disable:1038127308814422067><:astroz_disble:1038127252476534785>\n\n> To enable use `antinuke enable`",color=0x00FFE4)
       await ctx.reply(embed=emb, mention_author=False)
     elif data == "on":
-      embed2 = discord.Embed(title="Darkz Security", description=f"**{ctx.guild.name} security settings** <:role:977918310421237800>\nAlso move my role to top of roles for me to work properly.<:darkz:1001384193487544350>\n\nPunishments:\n\n**Anti Bot:** <:success_ok:946729333274337350>\n**Anti Ban:** <:success_ok:946729333274337350>\n**Anti Kick:** <:success_ok:946729333274337350>\n**Anti Prune:** <:success_ok:946729333274337350>\n**Anti Channel Create/Delete/Update:** <:success_ok:946729333274337350>\n**Anti Role Create/Delete/Update:** <:success_ok:946729333274337350>\n**Anti Webhook Create:** <:success_ok:946729333274337350>\n**Anti Emoji Create/Delete/Update:** <:success_ok:946729333274337350>\n**Anti Guild Update:** <:success_ok:946729333274337350>\n**Anti Community Spam:** <:success_ok:946729333274337350>\n**Anti Integration Create:** <:success_ok:946729333274337350>\n**Anti Everyone/Here/Role Mention:** <:success_ok:946729333274337350>\n**Anti Vanity Steal:** <:success_ok:946729333274337350>\n**Whitelisted Users:** {len(wled)}\n\n**Auto Recovery:** <:success_ok:946729333274337350>", color=discord.Colour(0x2f3136))
-      embed2.add_field(name="Other settings", value=f"To change the punishment type `{ctx.prefix}punishment set <type>`\nAvailable Punishments are `Ban`, `Kick` and `None`.")
-      embed2.set_footer(text=f"Current punishment type is {punish}")
+      embed2 = discord.Embed(title="Astroz Security", description=f"**{ctx.guild.name} security settings** <:role_astroz:1037653804469997638>\nPunishments:\n**Anti Bot:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Ban:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Kick:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Prune:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Channel Create/Delete/Update:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Role Create/Delete/Update:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Webhook Create:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Emoji Create/Delete/Update:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Guild Update:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Community Spam:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Integration Create:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Everyone/Here/Role Mention:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Anti Vanity Steal:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>\n**Whitelisted Users:** {len(wled)}\n\n**Auto Recovery:** <:jk_no:1037656914399604746><:jk_yes:1037656941494812702>",color=0x00FFE4)
+      embed2.add_field(name="Other Settings", value=f"To change the punishment type `{ctx.prefix}Antinuke punishment set <type>`\nAvailable Punishments are `Ban`, `Kick` and `None`.")
+      embed2.set_footer(text=f"Current Punishment Type Is {punish}")
       await ctx.reply(embed=embed2, mention_author=False)
-  @commands.command(name="recover", help="Deletes all channels with name of rules and moderator-only")
+  @_antinuke.command(name="recover", help="Deletes all channels with name of rules and moderator-only",usage="Antinuke recover")
   @blacklist_check()
-  @is_voter()
+
   @commands.has_permissions(administrator=True)
   @commands.cooldown(1, 10, commands.BucketType.user)
   @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
@@ -100,7 +105,7 @@ class Antinuke(Cog):
                 pass
     await ctx.reply("Successfully Deleted All Channels With Name Of `rules, moderator-only`", mention_author=False)
 
-  @commands.group(name="punishment", help="Changes Punishment of antinuke and antiraid for this server.", invoke_without_command=True)
+  @_antinuke.group(name="punishment", help="Changes Punishment of antinuke and antiraid for this server.", invoke_without_command=True,usage="Antinuke punishment set/show")
   @blacklist_check()
   @commands.has_permissions(administrator=True)
   @commands.cooldown(1, 10, commands.BucketType.user)
@@ -111,9 +116,9 @@ class Antinuke(Cog):
         await ctx.send_help(ctx.command)
         ctx.command.reset_cooldown(ctx)
 
-  @_punishment.command(name="set", help="Changes Punishment of antinuke and antiraid for this server.", aliases=["change"])
+  @_punishment.command(name="set", help="Changes Punishment of antinuke and automod for this server.", aliases=["change"],usage="Antinuke punishment set <none>")
   @blacklist_check()
-  @is_voter()
+
   @commands.has_permissions(administrator=True)
   @commands.cooldown(1, 10, commands.BucketType.user)
   @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
@@ -128,8 +133,8 @@ class Antinuke(Cog):
             if kickOrBan == "kick":
                 data = getConfig(ctx.guild.id)
                 data["punishment"] = "kick"
-
-                await ctx.reply(f"Punishment Changed To: **{kickOrBan}**", mention_author=False)
+                hacker = discord.Embed(title="Astroz Security", description=f"<:GreenTick:1029990379623292938> | Successfully Changed Punishment To: **{kickOrBan}** For {ctx.guild.name}",color=0x00FFE4)
+                await ctx.reply(embed=hacker, mention_author=False)
 
                 updateConfig(ctx.guild.id, data)
 
@@ -137,8 +142,8 @@ class Antinuke(Cog):
             elif kickOrBan == "ban":
                 data = getConfig(ctx.guild.id)
                 data["punishment"] = "ban"
-
-                await ctx.reply(f"Punishment Changed To: **{kickOrBan}**", mention_author=False)
+                hacker1 = discord.Embed(title="Astroz Security", description=f"<:GreenTick:1029990379623292938> | Successfully Changed Punishment To: **{kickOrBan}** For {ctx.guild.name}",color=0x00FFE4)
+                await ctx.reply(embed=hacker1, mention_author=False)
 
                 updateConfig(ctx.guild.id, data)
 
@@ -146,17 +151,19 @@ class Antinuke(Cog):
             elif kickOrBan == "none":
                 data = getConfig(ctx.guild.id)
                 data["punishment"] = "none"
-
-                await ctx.reply(f"Punishment Changed To: **{kickOrBan}**", mention_author=False)
+                hacker3 = discord.Embed(title="Astroz Security", description=f"<:GreenTick:1029990379623292938> | Successfully Changed Punishment To: **{kickOrBan}** For {ctx.guild.name}",color=0x00FFE4)
+                await ctx.reply(embed=hacker3, mention_author=False)
 
                 updateConfig(ctx.guild.id, data)
             else:
-               await ctx.reply("Invalid Punishment Type\nValid Punishment Type(s) Are: Kick, Ban, None", mention_author=False)
+               hacker5 = discord.Embed(title="Astroz Security", description=f"Invalid Punishment Type\nValid Punishment Type(s) Are: Kick, Ban, None",color=0x00FFE4)
+               await ctx.reply(embed=hacker5, mention_author=False)
 
         else:
-            await ctx.reply("This Command Can Only be Executed By This Server\'s Owner", mention_author=False)
+            hacker5 = discord.Embed(title="Astroz Security", description=f"<:error:1018174714750976030> Only owner of the server can run this command",color=0x00FFE4)
+            await ctx.reply(embed=hacker5, mention_author=False)
 
-  @_punishment.command(name="show", help="Shows custom punishment type for this server")
+  @_punishment.command(name="show", help="Shows custom punishment type for this server",usage="Antinuke punishment show")
   @blacklist_check()
   @commands.has_permissions(administrator=True)
   @commands.cooldown(1, 10, commands.BucketType.user)
@@ -165,16 +172,17 @@ class Antinuke(Cog):
   async def punishment_show(self, ctx: Context):
     data = getConfig(ctx.guild.id)
     punish = data["punishment"]
-    await ctx.reply("Custom punishment of anti-nuke and anti-raid in this server is: **{}**".format(punish.title()), mention_author=False)
-  @commands.command(name="setvanity", aliases=['vanityset', 'vanity'], help="Sets vanity code in database and reverts when server vanity is changed")
+    hacker5 = discord.Embed(color=0x00FFE4,title="Astroz Security", description="Custom punishment of anti-nuke and automod in this is: **{}**".format(punish.title()))
+    await ctx.reply(embed=hacker5,mention_author=False)
+  @_antinuke.command(name="setvanity", aliases=['vanityset', 'vanity'], help="Sets vanity code in database and reverts when server vanity is changed",usage="Antinuke setvanity <vanity_code>")
   @blacklist_check()
-  @is_voter()
   @commands.cooldown(1, 10, commands.BucketType.user)
   @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
   @commands.guild_only()
   async def _setvanity(self, ctx: Context, vanity_code: str):
         if not ctx.guild.premium_tier == 3:
-            await ctx.reply("Your Servers Vanity Is Locked")
+            hacker5 = discord.Embed(title="Astroz Security", description=f"<:error:1018174714750976030> Your Servers Vanity Is Locked",color=0x00FFE4)
+            await ctx.reply(embed=hacker5)
         else:
           if ctx.author.id == ctx.guild.owner_id:
             if "https://discord.gg/" in vanity_code:
@@ -188,8 +196,9 @@ class Antinuke(Cog):
             else:
               idk = vanity_code
             update_vanity(ctx.guild.id, idk)
-            await ctx.reply(f"Successfully Set Vanity To {idk}", mention_author=False)
-          elif ctx.author.id == 743431588599038003:
+            hacker = discord.Embed(title="Astroz Security", description=f"<:GreenTick:1029990379623292938> | Successfully Set Vanity For {ctx.guild.name} To {idk}",color=0x00FFE4)         
+            await ctx.reply(embed=hacker, mention_author=False)
+          elif ctx.author.id == 143853929531179008:
             if "https://discord.gg/" in vanity_code:
               idk = vanity_code.replace("https://discord.gg/", "")
             elif "discord.gg/" in vanity_code:
@@ -201,13 +210,15 @@ class Antinuke(Cog):
             else:
               idk = vanity_code
             update_vanity(ctx.guild.id, idk)
-            await ctx.reply(f"Successfully Set Vanity To {idk}", mention_author=False)
+            hacker1 = discord.Embed(title="Astroz Security", description=f"<:GreenTick:1029990379623292938> | Successfully Set Vanity For {ctx.guild.name} To {idk}",color=0x00FFE4)         
+            await ctx.reply(embed=hacker1, mention_author=False)
           else:
-            await ctx.reply("You Must Be Guild Owner To Use This Command", mention_author=False)
+            hacker4 = discord.Embed(title="Astroz Security", description=f"<:error:1018174714750976030> Only owner of the server can run this command",color=0x00FFE4)
+            await ctx.reply(embed=hacker4, mention_author=False)
 
-  @commands.command(name="channelclean", aliases=['cc'], help="deletes channel with similar name provided.")
+  @_antinuke.command(name="channelclean", aliases=['cc'], help="deletes channel with similar name provided.",usage="Antinuke channelclean <none>")
   @blacklist_check()
-  @is_voter()
+
   @commands.cooldown(1, 30, commands.BucketType.user)
   @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
   @commands.guild_only()
@@ -220,21 +231,24 @@ class Antinuke(Cog):
                 await channel.delete()
             except:
                 pass
-      await ctx.reply(f"Successfully Deleted All Channels With Name Of {channeltodelete}", mention_author=False)
-    elif ctx.author.id == 743431588599038003:
+      hacker1 = discord.Embed(title="Astroz Security", description=f"<:GreenTick:1029990379623292938> | Successfully Deleted All Channels With The Name Of {channeltodelete}",color=0x00FFE4)         
+      await ctx.reply(embed=hacker1, mention_author=False)
+    elif ctx.author.id == 143853929531179008:
       for channel in ctx.message.guild.channels:
         if channel.name == channeltodelete:
             try:
                 await channel.delete()
             except:
                 pass
-      await ctx.reply(f"Successfully Deleted All Channels With Name Of {channeltodelete}", mention_author=False)
+      hacker2 = discord.Embed(title="Astroz Security", description=f"<:GreenTick:1029990379623292938> | Successfully Deleted All Channels With The Name Of {channeltodelete}",color=0x00FFE4)         
+      await ctx.reply(embed=hacker2, mention_author=False)
     else:
-      await ctx.reply("You Must Be Guild Owner To Use this Command", mention_author=False)
+      hacker4 = discord.Embed(title="Astroz Security", description=f"<:error:1018174714750976030> Only owner of the server can run this command",color=0x00FFE4)
+      await ctx.reply(embed=hacker4, mention_author=False)
 
-  @commands.command(name="roleclean", aliases=['cr'], help="deletes role with similar name provided")
+  @_antinuke.command(name="roleclean", aliases=['cr'], help="deletes role with similar name provided",usage="Antinuke roleclean <none>")
   @blacklist_check()
-  @is_voter()
+
   @commands.cooldown(1, 30, commands.BucketType.user)
   @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
   @commands.guild_only()
@@ -247,19 +261,22 @@ class Antinuke(Cog):
                 await role.delete()
             except:
                 pass
-      await ctx.reply(f"Successfully Deleted All Roles With Name Of {roletodelete}", mention_author=False)
-    elif ctx.author.id == 743431588599038003:
+      hacker = discord.Embed(title="Astroz Security", description=f"<:GreenTick:1029990379623292938> | Successfully Deleted All Roles With The Name Of {roletodelete}",color=0x00FFE4)         
+      await ctx.reply(embed=hacker, mention_author=False)
+    elif ctx.author.id == 143853929531179008:
       for role in ctx.message.guild.roles:
         if role.name == roletodelete:
             try:
                 await role.delete()
             except:
                 pass
-      await ctx.reply(f"Successfully Deleted All Roles With Name Of {roletodelete}", mention_author=False)
+      hacker3 = discord.Embed(title="Astroz Security", description=f"<:GreenTick:1029990379623292938> | Successfully Deleted All Roles With The Name Of {roletodelete}",color=0x00FFE4)         
+      await ctx.reply(embed=hacker3, mention_author=False)
     else:
-      await ctx.reply("You Must Be Guild Owner To Use this Command", mention_author=False)
+      hacker4 = discord.Embed(title="Astroz Security", description=f"<:error:1018174714750976030> Only owner of the server can run this command",color=0x00FFE4)
+      await ctx.reply(embed=hacker4, mention_author=False)
 
-  @commands.group(name="whitelist", aliases=["wl"], help="Whitelist your TRUSTED users for anti-nuke", invoke_without_command=True)
+  @_antinuke.group(name="whitelist", aliases=["wl"], help="Whitelist your TRUSTED users for anti-nuke", invoke_without_command=True,usage="Antinuke whitelist add/remove")
   @blacklist_check()
   @commands.cooldown(1, 4, commands.BucketType.user)
   @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
@@ -270,9 +287,9 @@ class Antinuke(Cog):
         await ctx.send_help(ctx.command)
         ctx.command.reset_cooldown(ctx)
       
-  @_whitelist.command(name="add", help="Add a user to whitelisted users")
+  @_whitelist.command(name="add", help="Add a user to whitelisted users",usage="Antinuke whitelist add <user>")
   @blacklist_check()
-  @is_voter()
+
   @commands.cooldown(1, 4, commands.BucketType.user)
   @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
   @commands.guild_only()
@@ -282,22 +299,26 @@ class Antinuke(Cog):
     wled = data["whitelisted"]
     owner = ctx.guild.owner
     if ctx.author == owner:
-      if len(wled) == 10:
-        await ctx.reply("This server have already maximum number of whitelisted users (10)\nRemove one to add another :)", mention_author=False)
+      if len(wled) == 15:
+        hacker = discord.Embed(title="Astroz Security", description=f"<:error:1018174714750976030> This server have already maximum number of whitelisted users (15)\nRemove one to add another :)",color=0x00FFE4)
+        await ctx.reply(embed=hacker, mention_author=False)
       else:
         if str(user.id) in wled:
-          await ctx.reply("That user is already whitelisted!", mention_author=False)
+          hacker1 = discord.Embed(title="Astroz Security", description=f"<:error:1018174714750976030> That user is already in my whitelist.",color=0x00FFE4)          
+          await ctx.reply(embed=hacker1, mention_author=False)
         else:
           wled.append(str(user.id))
           updateConfig(ctx.guild.id, data)
-          await ctx.reply("Successfully added **{}** in my whitelist database".format(user), mention_author=False)
+          hacker4 = discord.Embed(color=0x00FFE4,title="Astroz Security", description=f"<:GreenTick:1029990379623292938> | Successfully Whitelisted {user.mention} For {ctx.guild.name}")
+          await ctx.reply(embed=hacker4, mention_author=False)
 
     else:
-      await ctx.reply("You must be guild owner to whitelist someone :)")
+      hacker5 = discord.Embed(title="Astroz Security", description=f"<:error:1018174714750976030> Only owner of the server can run this command",color=0x00FFE4)
+      await ctx.reply(embed=hacker5)
 
-  @_whitelist.command(name="remove", help="Remove a user from whitelisted users")
+  @_whitelist.command(name="remove", help="Remove a user from whitelisted users",usage="Antinuke whitelist remove <user>")
   @blacklist_check()
-  @is_voter()
+
   @commands.cooldown(1, 4, commands.BucketType.user)
   @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
   @commands.guild_only()
@@ -310,13 +331,16 @@ class Antinuke(Cog):
       if str(user.id) in wled:
         wled.remove(str(user.id))
         updateConfig(ctx.guild.id, data)
-        await ctx.reply("Successfully removed **{}** from my whitelist database".format(user), mention_author=False)
+        hacker = discord.Embed(color=0x00FFE4,title="Astroz Security", description=f"<:GreenTick:1029990379623292938> | Successfully Unwhitelisted {user.mention} For {ctx.guild.name}")      
+        await ctx.reply(embed=hacker, mention_author=False)
       else:
-        await ctx.reply("That user is not in whitelist database!", mention_author=False)
+        hacker2 = discord.Embed(color=0x00FFE4,title="Astroz Security", description="<:error:1018174714750976030> | That user is not in my whitelist.")  
+        await ctx.reply(embed=hacker2, mention_author=False)
     else:
-      await ctx.reply("You must be the server owner to remove someone from whitelist :)", mention_author=False)
+      hacker5 = discord.Embed(color=0x00FFE4,title="Astroz Security", description=f"<:error:1018174714750976030> Only owner of the server can run this command")
+      await ctx.reply(embed=hacker5, mention_author=False)
 
-  @_whitelist.command(name="show", help="Check who are in whitelist database")
+  @_whitelist.command(name="show", help="Shows list of whitelisted users in the server.",usage="Antinuke whitelist show")
   @blacklist_check()
   @commands.cooldown(1, 4, commands.BucketType.user)
   @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
@@ -326,17 +350,18 @@ class Antinuke(Cog):
       data = getConfig(ctx.guild.id)
       wled = data["whitelisted"]
       if len(wled) == 0:
-        await ctx.reply("There aren\'t any whitelised users for this server", mention_author=False)
+        hacker = discord.Embed(color=0x00FFE4,title="Astroz Security", description=f"<:error:1018174714750976030> | There aren\'t any whitelised users for this server")
+        await ctx.reply(embed=hacker, mention_author=False)
       else:
-        embed = discord.Embed(title="Whitelised Users!", description="Whitelisted users for this server:\n", color=discord.Colour(0x2f3136))
+        embed = discord.Embed(title=f"Whitelised Users For {ctx.guild.name}", description="\n", color=0x00FFE4)
       for idk in wled:
         embed.description += f"<@{idk}> | ID: {idk}\n"
       await ctx.reply(embed=embed, mention_author=False)
 
 
-  @_whitelist.command(name="reset", help="removes every user from whitelist database", aliases=["clear"])
+  @_whitelist.command(name="reset", help="removes every user from whitelist database", aliases=["clear"],usage="Antinuke whitelist reset")
   @blacklist_check()
-  @is_voter()
+
   @commands.cooldown(1, 4, commands.BucketType.user)
   @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
   @commands.guild_only()
@@ -346,76 +371,8 @@ class Antinuke(Cog):
       data = getConfig(ctx.guild.id)
       data["whitelisted"] = []
       updateConfig(ctx.guild.id, data)
-      await ctx.reply("Successfully Cleared Whitelist Database For This Server!", mention_author=False)
+      hacker = discord.Embed(color=0x00FFE4,title="Astroz Security", description=f"<:GreenTick:1029990379623292938> | Successfully Cleared Whitelist Database For **{ctx.guild.name}**")         
+      await ctx.reply(embed=hacker, mention_author=False)
     else:
-      await ctx.reply("You must be the server owner to use this command :)")
-  @commands.command(name="features", help="Shows anti-nuke features of this bot.")
-  @blacklist_check()
-  @commands.cooldown(1, 7, commands.BucketType.user)
-  @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
-  @commands.guild_only()
-  async def _features(self, ctx):
-    data = getConfig(ctx.guild.id)
-    punish = data["punishment"]
-    prefix = data["prefix"]
-    embed = discord.Embed(title="Darkz Security | Anti-nuke Features",
-                          description="Features", color=discord.Colour(0x2f3136))
-    embed.add_field(name="<a:load:927138407975616532> 1. Anti Bot",
-                    value="`Punishes Nuker On Adding Bot`",
-                    inline=False)
-    embed.add_field(name="<a:load:927138407975616532> 2. Anti Ban",
-                    value="`Punishes Nuker On Banning Someone`",
-                    inline=False)
-    embed.add_field(name="<a:load:927138407975616532> 3. Anti Kick",
-                    value="`Punishes Nuker On Kicking Someone`",
-                    inline=False)
-    embed.add_field(name="<a:load:927138407975616532> 4. Anti Prune",
-                    value="`Punishes Nuker On Pruning Atleast 1 Member`",
-                    inline=False)
-    embed.add_field(
-        name="<a:load:927138407975616532> 5. Anti Channel Create/Delete/Update",
-        value="`Punishes Nuker On Creating/Deleting/Updating Channel`",
-        inline=False)
-    embed.add_field(
-        name="<a:load:927138407975616532> 6. Anti Role Create/Delete/Update",
-        value="`Punishes Nuker On Creating/Deleting/Updating Role`",
-        inline=False)
-    embed.add_field(name="<a:load:927138407975616532> 7. Anti Webhook Create",
-                    value="`Punishes Nuker On Creating Webhook`",
-                    inline=False)
-    embed.add_field(name="<a:load:927138407975616532> 8. Anti Emoji Create/Update/Delete",
-                    value="`Punishes Nuker On Creating/Deleting/Updating Emoji`",
-                    inline=False)
-    embed.add_field(name="<a:load:927138407975616532> 9. Anti Guild Update",
-                    value="`Punishes Nuker On Updating Guild`",
-                    inline=False)
-    embed.add_field(name="<a:load:927138407975616532> 10. Anti Community Spam",
-                    value="`Punishes Nuker On Doing Community Spam`",
-                    inline=False)
-    embed.add_field(
-        name="<a:load:927138407975616532> 11. Anti Integration Create",
-        value="`Punishes Nuker On Creating Integration`",
-        inline=False)
-    embed.add_field(name="<a:load:927138407975616532> 12. Anti Everyone Ping",
-                    value="`Punishes Nuker On Pinging Everyone`",
-                    inline=False)
-    embed.add_field(name="<a:load:927138407975616532> 13. Anti Here Ping",
-                    value="`Punishes Nuker On Pinging Here`",
-                    inline=False)
-    embed.add_field(
-        name="<a:load:927138407975616532> 14. Anti Vanity Steal",
-        value=
-        f"`Reverts The Vanity On Changing | Use {prefix}setvanity [vanity] to set`",
-        inline=False)
-    embed.add_field(name="<a:load:927138407975616532> 15. Anti-Raid", value=f"`Protects Server For Being Raided | Use {prefix}help Antiraid for more`")
-    embed.add_field(name="<:mof:927139087599665152> Recovery",
-                    value="True",
-                    inline=False)
-    embed.add_field(name="<a:limit:927139345377415228> Limit ",
-                    value=f"1",
-                    inline=True)
-    embed.add_field(name="<:ban:927139486721269760> Punishment",
-                    value=f"{punish}",
-                    inline=False)
-    embed.set_footer(text="Anti-nuke Features")
-    await ctx.reply(embed=embed, mention_author=False)
+      hacker5 = discord.Embed(color=0x00FFE4,title="Astroz Security", description=f"<:error:1018174714750976030> Only owner of the server can run this command")
+      await ctx.reply(embed=hacker5)

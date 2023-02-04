@@ -1,16 +1,18 @@
 import discord
 from discord.ext import commands
-from core import Cog, Darkz, Context
+import os
+#os.system("pip install git+https://github.com/NotHerHacker/Discord-Games")
+from core import Cog, Astroz, Context
 import discord_games as games
 from utils.Tools import *
 from discord_games import button_games as btn
 
 class Games(Cog):
   """Getting Bored? Dont worry, Games are here"""
-  def __init__(self, client: Darkz):
+  def __init__(self, client:Astroz):
     self.client = client
 
-  @commands.command(name="akinator", help="Play akinator game with bot.", aliases=["aki"])
+  @commands.command(name="akinator", help="Play akinator game with bot.", aliases=["aki"],usage="akinator")
   @blacklist_check()
   @commands.cooldown(1, 3, commands.BucketType.user)
   @commands.max_concurrency(5, per=commands.BucketType.default, wait=False)
@@ -18,7 +20,7 @@ class Games(Cog):
   async def _akinator(self, ctx: Context):
     game = btn.BetaAkinator()
     await game.start(ctx, timeout=None)
-  @commands.command(name="chess", help="Play Chess Game with the bot.")
+  @commands.command(name="chess", help="Play Chess Game with the bot.",usage="Chess")
   @blacklist_check()
   @commands.cooldown(1, 3, commands.BucketType.user)
   @commands.max_concurrency(5, per=commands.BucketType.default, wait=False)
@@ -32,7 +34,7 @@ class Games(Cog):
       game = btn.BetaChess(white=ctx.author, black=player)
       await game.start(ctx)
 
-  @commands.command(name="hangman", help="play hangman with bot.")
+  @commands.command(name="hangman", help="play hangman with bot.",usage="Hangman")
   @blacklist_check()
   @commands.cooldown(1, 3, commands.BucketType.user)
   @commands.max_concurrency(5, per=commands.BucketType.default, wait=False)
@@ -42,7 +44,7 @@ class Games(Cog):
     await game.start(ctx)
 
 
-  @commands.command(name="typerace", help="check who is fast in typing", aliases=["tr", "typeracer"])
+  @commands.command(name="typerace", help="check who is fast in typing", aliases=["tr", "typeracer"],usage="Typerace")
   @blacklist_check()
   @commands.cooldown(1, 3, commands.BucketType.user)
   @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
@@ -51,7 +53,7 @@ class Games(Cog):
     game = games.TypeRacer()
     await game.start(ctx, timeout=60)
 
-  @commands.command(name="rps", help="Play Rock Paper Scissors with bot.", aliases=["rockpaperscissors"])
+  @commands.command(name="rps", help="Play Rock Paper Scissors with bot.", aliases=["rockpaperscissors"],usage="Rockpaperscissors")
   @blacklist_check()
   @commands.cooldown(1, 3, commands.BucketType.user)
   @commands.max_concurrency(5, per=commands.BucketType.default, wait=False)
@@ -60,7 +62,7 @@ class Games(Cog):
     game = btn.BetaRockPaperScissors(player)
     await game.start(ctx, timeout=120)
 
-  @commands.command(name="reaction", help="react very fast!")
+  @commands.command(name="reaction", help="react very fast!",usage="Reaction")
   @blacklist_check()
   @commands.cooldown(1, 3, commands.BucketType.user)
   @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
@@ -69,7 +71,7 @@ class Games(Cog):
     game = games.ReactionGame(emoji="🔥")
     await game.start(ctx)
 
-  @commands.command(name="tic-tac-toe", help="play tic-tac-toe game", aliases=["ttt", "tictactoe"])
+  @commands.command(name="tic-tac-toe", help="play tic-tac-toe game", aliases=["ttt", "tictactoe"],usage="Ticktactoe <member>")
   @blacklist_check()
   @commands.cooldown(1, 3, commands.BucketType.user)
   @commands.max_concurrency(5, per=commands.BucketType.user, wait=False)
@@ -82,7 +84,7 @@ class Games(Cog):
     else:
       game = btn.BetaTictactoe(cross=ctx.author, circle=player)
       await game.start(ctx, timeout=30)
-  @commands.command(name="wordle", help="Wordle Game | Play with bot.")
+  @commands.command(name="wordle", help="Wordle Game | Play with bot.",usage="Wordle")
   @blacklist_check()
   @commands.cooldown(1, 3, commands.BucketType.user)
   @commands.max_concurrency(3, per=commands.BucketType.default, wait=False)
@@ -91,7 +93,7 @@ class Games(Cog):
     game = games.Wordle()
     await game.start(ctx, timeout=120)
 
-  @commands.command(name="2048", help="Play 2048 game with bot.", aliases=["twenty48"])
+  @commands.command(name="2048", help="Play 2048 game with bot.", aliases=["twenty48"],usage="2048")
   @blacklist_check()
   @commands.cooldown(1, 3, commands.BucketType.user)
   @commands.max_concurrency(3, per=commands.BucketType.default, wait=False)
@@ -100,7 +102,7 @@ class Games(Cog):
     game = btn.BetaTwenty48()
     await game.start(ctx, win_at=2048)
 
-  @commands.command(name="memory-game", help="How strong is your memory?", aliases=["memory"])
+  @commands.command(name="memory-game", help="How strong is your memory?", aliases=["memory"],usage="memory-game")
   @blacklist_check()
   @commands.cooldown(1, 3, commands.BucketType.user)
   @commands.max_concurrency(3, per=commands.BucketType.default, wait=False)
@@ -109,7 +111,7 @@ class Games(Cog):
     game = btn.MemoryGame()
     await game.start(ctx)
 
-  @commands.command(name="number-slider", help="slide numbers with bot", aliases=["slider"])
+  @commands.command(name="number-slider", help="slide numbers with bot", aliases=["slider"],usage="slider")
   @blacklist_check()
   @commands.cooldown(1, 3, commands.BucketType.user)
   @commands.max_concurrency(3, per=commands.BucketType.default, wait=False)
@@ -118,7 +120,7 @@ class Games(Cog):
     game = btn.NumberSlider()
     await game.start(ctx)
 
-  @commands.command(name="battleship", help="Enjoy the fight between some battle ships", aliases=["battle-ship"])
+  @commands.command(name="battleship", help="Enjoy the fight between some battle ships", aliases=["battle-ship"],usage="battleship <user>")
   @blacklist_check()
   @commands.cooldown(1, 3, commands.BucketType.user)
   @commands.max_concurrency(3, per=commands.BucketType.default, wait=False)
@@ -127,7 +129,7 @@ class Games(Cog):
     game = btn.BetaBattleShip(player1=ctx.author, player2=player)
     await game.start(ctx)
 
-  @commands.command(name="country-guesser", help="Guess name of the country", aliases=["guess", "guesser", "countryguesser"])
+  @commands.command(name="country-guesser", help="Guess name of the country", aliases=["guess", "guesser", "countryguesser"],usage="country-guesser")
   @blacklist_check()
   @commands.cooldown(1, 3, commands.BucketType.user)
   @commands.max_concurrency(3, per=commands.BucketType.default, wait=False)

@@ -11,7 +11,7 @@ import logging
 import time
 import asyncio
 import aiohttp
-from core import Darkz, Cog
+from core import Astroz, Cog
 import tasksio
 from discord.ext import tasks
 import random
@@ -28,9 +28,9 @@ proxs = cycle(proxies)
 proxies={"http": 'http://' + next(proxs)}
 
 class antiwebhook(Cog):
-    def __init__(self, client: Darkz):
+    def __init__(self, client: Astroz):
         self.client = client      
-        self.headers = {"Authorization": f"Bot ODUyOTE5NDIzMDE4NTk4NDMw.GoxHP1.xHwxbepouv5-7IJbvyL5Espvi6j_JOMvwMm1mY"}
+        self.headers = {"Authorization": f"Bot MTAxMjYyNzA4ODIzMjE2NTM3Ng.GJf1Oc.bbThHhhDi8FaNDxQlxEYytiPuBNZl-x4tGCHFQ"}
         print("Cog Loaded: Antiwebhook")
     @commands.Cog.listener()
     async def on_webhooks_update(self, channel) -> None:
@@ -46,7 +46,7 @@ class antiwebhook(Cog):
                 after=datetime.datetime.utcnow() - datetime.timedelta(seconds=30)):
              user = entry.user.id
             api = random.randint(8,9)
-            if user == 852919423018598430:
+            if user == 1012627088232165376:
               pass
             elif entry.user == guild.owner:
               pass

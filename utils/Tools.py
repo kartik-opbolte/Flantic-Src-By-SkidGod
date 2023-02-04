@@ -3,8 +3,7 @@ from discord.ext import commands
 from core import Context
 import aiohttp
 
-class NotVoter(commands.CheckFailure):
-  pass
+
 
 def DotEnv(query: str):
   return os.getenv(query)
@@ -18,7 +17,7 @@ def getConfig(guildID):
             "antiLink": False,
             "whitelisted": [], 
             "punishment": "ban",
-            "prefix": "$"
+            "prefix": "@"
         }
         updateConfig(guildID, defaultConfig)
         return defaultConfig
@@ -77,24 +76,8 @@ def restart_program():
     python = sys.executable
     os.execl(python, python, *sys.argv)
 
-def getlogger(guildid):
-  with open("logs.json", "r") as ok:
-    data = json.load(ok)
-  if str(guildid) not in data:
-    default = {
-      "channel": ""
-    }
-    makelogger(guildid, default)
-    return default
-  return data[str(guildid)]
 
-def makelogger(guildid, data):
-  with open("logs.json", "r") as f:
-    logs = json.load(f)
-  logs[str(guildid)] = data
-  new = json.dumps(logs, indent=4, ensure_ascii=False)
-  with open("logs.json", "w") as idk:
-    idk.write(new)
+
 
 def getbadges(userid):
   with open("badges.json", "r") as f:
@@ -113,30 +96,8 @@ def makebadges(userid, data):
   with open("badges.json", "w") as w:
     w.write(new)
 
-async def check_voter(mem):
-  async with aiohttp.ClientSession(headers={"Authorization": DotEnv("top-gg")}) as session:
-    async with session.get(f"https://top.gg/api/bots/852919423018598430/check?userId={str(mem)}") as response:
-      vote = await response.json()
-      if vote["voted"] == 1 or mem in [743431588599038003, 905396101274828821]:
-        response.close()
-        return "okay"
-      else:
-        response.close()
-        return "not okay"
 
-def is_voter():
-  async def predicate(ctx: Context):
-    async with aiohttp.ClientSession(headers={"Authorization": DotEnv("top-gg")}) as session:
-      async with session.get(f"https://top.gg/api/bots/{str(ctx.bot.user.id)}/check?userId={str(ctx.author.id)}") as response:
-        vote = await response.json()
-        if vote["voted"] == 1 or ctx.author.id in ctx.bot.owner_ids:
-          response.close()
-          return True
-        else:
-          response.close()
-          raise NotVoter()
 
-  return commands.check(predicate)
 
 def getanti(guildid):
     with open("anti.json", "r") as config:
